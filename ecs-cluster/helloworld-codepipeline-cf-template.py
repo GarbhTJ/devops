@@ -31,7 +31,7 @@ t.set_description("Effective DevOps in AWS: Helloworld Pipeline")
 
 t.add_resource(Bucket(
     "S3Bucket",
-    VersioninConfiguration=VersioningConfiguration(
+    VersioningConfiguration=VersioningConfiguration(
         Status="Enabled"
     )
 ))
@@ -51,7 +51,7 @@ t.add_resource(Role(
     Policies=[
         IAMPolicy(
             PolicyName="HelloworldCodePipeline",
-            PolicyDocument=(
+            PolicyDocument={
                 "Statement": [
                     {"Effect": "Allow", "Action": "cloudformation:*", "Resource": "*"},
                     {"Effect": "Allow", "Action": "codebuild:*", "Resource": "*"},
@@ -61,7 +61,7 @@ t.add_resource(Role(
                     {"Effect": "Allow", "Action": "iam:*", "Resource": "*"},
                     {"Effect": "Allow", "Action": "s3:*", "Resource": "*"},
                 ]
-            )
+            }
         )
     ]
 ))
@@ -72,12 +72,14 @@ t.add_resource(Role(
     Path="/",
     AssumeRolePolicyDocument=Policy(
         Statement=[
-            Effect=Allow,
-            Action=[AssumeRole],
-            Principal=Principal(
-                "Service",
-                ["cloudformation.amazonaws.com"])
-            ),
+            Statement(
+                Effect=Allow,
+                Action=[AssumeRole],
+                Principal=Principal(
+                    "Service",
+                    ["cloudformation.amazonaws.com"]
+                ),
+            )
         ]
     ),
     Policies=[
